@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
+    <meta name="referrer" content="never">
+    <title>防抖和节流</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .container {
+            margin: 100px 200px;
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .text {
+            text-align: center;
+            font-size: 24px;
+            color: red;
+        }
+        
+        .box {
+            width: 400px;
+            height: 300px;
+            font-size: 60px;
+            color: #fff;
+            text-align: center;
+            line-height: 300px;
+            background-color: #9000ff;
+        }
+        
+        .box1 {
+            width: 400px;
+            height: 300px;
+            font-size: 60px;
+            color: #fff;
+            text-align: center;
+            line-height: 300px;
+            background-color: #ff008c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="text">防抖</div>
+            <div class="box">0</div>
+        </div>
+        <div class="content">
+            <div class="text">节流</div>
+            <div class="box1">0</div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        var box = document.querySelector(".box");
+        var box1 = document.querySelector(".box1");
+        // 防抖
+        box.onmousemove = debounce1(function() {
+            this.innerText = ~~this.innerText + 1;
+        }, 1000);
+        // 节流
+        box1.onmousemove = throttle1(function() {
+            this.innerText = ~~this.innerText + 1;
+        }, 1000);
+
+        // 防抖  debounce
+        // 隔单位时间执行一次函数，如果单位时间内触发了函数，重新计时
+        function debounce1(func, wait) {
+            var timer = null;
+            return function() {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                var that = this;
+                timer = setTimeout(function() {
+                    func.call(that);
+                }, wait)
+            }
+        }
+
+        function debounce2(func, wait) {
+            var timer = null;
+            return function() {
+                if (timer) {
+                    clearTimeout(timer);
+                } else {
+                    func.call(this);
+                }
+                timer = setTimeout(function() {
+                    timer = null;
+                }, wait)
+            }
+        }
+
+        // 节流  throttle
+        // 隔单位时间执行一次函数，如果单位时间内触发了函数，忽略
+        function throttle1(func, wait) {
+            var startTime = Date.now();
+            return function() {
+                if (Date.now() - startTime > wait) {
+                    func.call(this);
+                    startTime = Date.now();
+                }
+            }
+        }
+
+        function throttle2(func, wait) {
+            var timer = null;
+            return function() {
+                if (!timer) {
+                    var that = this;
+                    timer = setTimeout(function() {
+                        func.call(that);
+                        timer = null;
+                    }, wait)
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
