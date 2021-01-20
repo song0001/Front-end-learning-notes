@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .c1 {
+            width: 300px;
+            height: 50px;
+            background-color: red;
+        }
+    </style>
+    <script src="./vue.js"></script>
+
+</head>
+
+<body>
+
+    <div id="app">
+        <input type="text" v-model='text'>
+        <h3>我是父组件 要接收子组件的值==>{{gift}}</h3>
+        <Demo :val='text' class="c1"></Demo>
+        <Weather @send-money='resivegift'></Weather>
+        <Com></Com>
+    </div>
+
+    <template id="d1">
+      <div  @click='sendGift'>
+         <h3>我是儿子 要给父亲钱 点我发钱</h3>
+      </div>
+    </template>
+    <template id="d2">
+      <div>
+         <h3>今天天气真冷啊</h3>
+         <p>是啊啊啊啊啊啊啊啊啊啊啊啊</p>
+      </div>
+    </template>
+    <script>
+        var Demo = {
+            template: '<h3>我是子组件 接收父组件传来的值==>{{val}} </h3>',
+            props: ['val']
+        }
+        var Com = {
+            template: '#d2'
+        }
+        var vm = new Vue({
+
+            el: '#app',
+            data: {
+                text: '',
+                gift: '还没收到钱呢'
+            },
+            methods: {
+                resivegift(val) {
+                    console.log(val);
+                    this.gift = val
+                }
+            },
+
+            components: {
+                Demo,
+                Weather: {
+                    template: '#d1',
+                    data() {
+                        return {
+                            money: '100元'
+                        }
+                    },
+                    methods: {
+                        sendGift() {
+                            this.$emit('send-money', this.money)
+                        }
+                    }
+                },
+                Com
+
+            },
+
+        });
+    </script>
+</body>
+
+</html>
