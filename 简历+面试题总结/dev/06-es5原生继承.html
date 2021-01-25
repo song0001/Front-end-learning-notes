@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        // es6有 class  extends  constructor  super   等关键词 可以方便的实现继承   
+        // 在vue中 并没有直接使用所谓的继承  , 但是在react中 所有的组件都是 const xxCom  extend ReactComponent 
+        // es5没有类的概念
+        // 面试问: es5原生继承的方式:  借用构造函数继承+原型继承=> 组合继承
+        function Animal(name){
+            this.name = name;
+        }
+        Animal.prototype.move = function(){
+            alert(this.name+' is  moving...');
+        }
+        // 继承animal
+        function Dog(name,color){
+            // 1. 借用构造函数
+            Animal.call(this,name);
+            this.color = color;
+        }
+        // 2. 原型继承
+        Dog.prototype = new Animal();
+        
+        Dog.prototype.jump = function(){
+            alert(this.name + '\' color is '+ this.color+', it is jumping...');
+        }
+        // 3. new
+        var Odi = new Dog('欧弟','yellow');
+        console.log(Odi.constructor)
+        Odi.jump();
+    </script>
+</body>
+</html>

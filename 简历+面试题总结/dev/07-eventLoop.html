@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        // 1. 执行顺序
+        // 2. 打印顺序
+        console.log('start...');
+
+        setTimeout(()=>{
+            console.log('setTimeout....');
+        },0)
+
+        var promise = new Promise((resolve,reject)=>{
+            resolve();
+        })
+        // promise 特指微任务
+        promise.then(res=>{
+            console.log('promise...');
+        })
+
+    </script>
+</body>
+</html>
