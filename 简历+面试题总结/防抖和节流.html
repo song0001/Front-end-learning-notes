@@ -129,7 +129,23 @@
                 }
             }
         }
+        // 解构赋值
+        let node = {
+            type: {
+                a: 5,
+                b: 10
+            },
+            name: "foo"
+        };
+        let {
+            a,
+            b
+        } = node.type
+        console.log(a); //5
+        console.log(b); //10
     </script>
+
+
 </body>
 
 </html>
