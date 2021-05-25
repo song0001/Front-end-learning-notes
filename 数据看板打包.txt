@@ -1,3 +1,0 @@
-api.js找到baseurl，把注释放开，
-然后找到vue.config.js，找到代理proxy，把open 值改成false，
-最后敲命令 yarn build-dev打包就行了
