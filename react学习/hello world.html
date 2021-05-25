@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- 引入react依赖库,注意顺序,当前版本: v17.0.2 -->
+  <script src="lib/react/react.development.js"></script>
+  <script src="lib/react/react-dom.development.js"></script>
+  <!-- 引入babel库,用于解析jsx语法
+    # https://www.babeljs.cn/setup#installation
+  -->
+  <script src="lib/react/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  // 这里不是原生的javascript语法,而是特殊的jsx(javascript+xml)语法,需要用babel解析.
+  <script type="text/babel">
+    var msg = 'hello,world!';
+    // 使用es6 class 通过继承可以得到一个react组件的类
+    class HelloWorld extends React.Component {
+      render(){
+        return (
+          <div>{msg}</div>
+        )
+      }
+    }
+    // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+    ReactDOM.render(<HelloWorld />,document.getElementById('root'));
+  </script>
+</body>
+</html>
