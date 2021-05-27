@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,28 +10,163 @@
   <!-- <script src="lib/react/react.development.js"></script>
   <script src="lib/react/react-dom.development.js"></script> -->
   <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
   <!-- 引入babel库,用于解析jsx语法
     # https://www.babeljs.cn/setup#installation
   -->
   <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
+<style >
+    .danger{
+      color: rgb(55, 0, 255);
+    }
+    .large{
+      font-size: 30px;
+    }
+</style>
+</style>
 <body>
   <div id="root"></div>
-  
+
   <!-- 这里不是原生的javascript语法,而是特殊的jsx(javascript+xml)语法,需要用babel解析. -->
   <script type="text/babel">
     var msg = 'hello,world!';
     // 使用es6 class 通过继承可以得到一个react组件的类
-    class HelloWorld extends React.Component {
+    // class HelloWorld extends React.Component {
+    //   render(){
+    //     return (
+    //       <div>{msg}</div>
+    //     )
+    //   }
+    // }
+
+    // class HelloWorld extends React.Component {
+    //       render(){
+    //         return (
+    //           <div>
+    //             { 1>0?10:20 }
+    //           </div>
+    //         )
+    //       }
+    //     }
+
+    // class HelloWorld extends React.Component {
+    //   render() {
+    //     return (
+    //       <div>
+    //   { new Date().getTime() }
+    //       </div>
+    //     )
+    //   }
+    // }
+
+    // class HelloWorld extends React.Component {
+    //   render() {
+    //     return (
+    //       <ul>
+    //         {
+    //           Array(10).fill(null).map((item,index)=>(
+    //             <li key={index}>{index}</li>
+    //           ))
+    //         }
+    //       </ul>
+    //     )
+    //   }
+    // }
+
+    // class HelloWorld extends React.Component {
+    //   render(){
+    //     return (
+    //       1>2? (<div>今天好心情!</div>): (<div>今天很生气!</div>)
+    //     )
+    //   }
+    // }
+
+    var user = {
+      name: '张三',
+      age: 20,
+      sex: '男'
+    }
+    // 遍历对象属性名（键）
+    var key=Object.keys(user)
+     // 遍历对象属性值（值）
+    var value=Object.values(user)
+    console.log(key,value)
+    // class HelloWorld extends React.Component {
+    //   render(){
+    //     return (
+    //       <div >
+    //         {
+    //           Object.keys(user).map(item=>(
+    //               <p >{item}</p>  
+    //           ))
+    //         }
+    //       </div>
+    //     )
+    //   }
+    // }
+
+    // var arr = [1,2,3,4];
+    // class HelloWorld extends React.Component {
+    //   render(){
+    //     return (
+    //       <div>
+    //         { arr }
+    //       </div>
+    //     )
+    //   }
+    // }
+
+//     var arr = [1,2,3,4];
+// class HelloWorld extends React.Component {
+//   render(){
+//     return (
+//       <div style={{color:'red',fontSize:'30px'}}>
+//         { arr }
+//       </div>
+//     )
+//   }
+// }
+
+var arr = [1,2,3,4];
+// var style = {color: 'green',fontSize: '20px'};
+// class HelloWorld extends React.Component {
+//   render(){
+//     return (
+//       <div style={style}>
+//         { arr }
+//       </div>
+//     )
+//   }
+// }
+
+class HelloWorld extends React.Component {
       render(){
         return (
-          <div>{msg}</div>
+          <div  className={'danger large'}>
+          {/*className和class属性是一样的,而且必须是驼峰 */}
+
+            { arr }
+          </div>
         )
       }
-    }
+}
+
+class Hello extends React.Component {
+      render(){
+        return (
+          <div  className={'danger large'}>
+          {/*className和class属性是一样的,而且必须是驼峰 */}
+
+          我是Hello组件
+          </div>
+        )
+      }
+}
     // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
-    ReactDOM.render(<HelloWorld />,document.getElementById('root'));
+        // 以数组的方式渲染多个已创建的组件
+    ReactDOM.render([<HelloWorld />,<Hello/>], document.getElementById('root'));
   </script>
 </body>
+
 </html>
