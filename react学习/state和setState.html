@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <!-- 引入babel库,用于解析jsx语法
+    # https://www.babeljs.cn/setup#installation
+  -->
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<body>
+  <div id="root"></div>
+    <script type="text/babel">
+     class HelloWorld extends React.Component {
+      constructor(){
+        // 如果写了构造函数,那么super必须写
+        super();
+        console.log('构造函数...');
+        this.state = {
+          nowTime: new Date().getTime()
+        }
+      }
+      componentDidMount(){
+        console.log('this',this);
+        setTimeout(()=>{
+          this.setState({
+            nowTime: '新时间'
+          })
+          console.log(new Date().getTime(),this.state.nowTime)
+        },3000)
+      }
+      componentWillUnMount(){
+        console.log('组件即将销毁...');
+      }
+      render(){
+        console.log('render...')
+        return (
+          <div className={'danger large'}>
+            <h2>倒计时</h2>
+            { /* className和class属性是一样的,而且必须是驼峰 */ }
+            <span>{ this.state.nowTime }</span>
+          </div>
+        )
+      }
+    }
+    // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+    ReactDOM.render(<HelloWorld />,document.getElementById('root'));
+    </script>
+</body>
+</html>
