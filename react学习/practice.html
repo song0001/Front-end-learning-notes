@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>js</title>
+    <script>
+
+        var i = 1
+        function fun1() {
+
+            alert("你好")
+        }
+        function fun2() {
+            x = document.getElementById("myi").value
+            document.getElementById("myh").innerHTML = x
+        }
+
+        function fun3() {
+
+            if (document.getElementById("myimg").src == "https://www.baidu.com/img/flexible/logo/pc/result.png") {
+                document.getElementById("myimg").src = "https://himg.bdimg.com/sys/portraitn/item/4b216139353534313531316753"
+                return a = true
+            } else {
+                document.getElementById("myimg").src = "https://www.baidu.com/img/flexible/logo/pc/result.png"
+                return a = false
+            }
+
+     
+    
+        }
+
+    </script>
+
+</head>
+
+<body>
+    <img id="myimg" src="https://www.baidu.com/img/flexible/logo/pc/result.png" onclick="fun3()"><br>
+
+
+    请输入：<input id="myi" type="text"><button onclick='fun2()'>确定</button>
+    <h2 id="myh"> </h2>
+
+
+    <h1 onclick='fun1()'>内容1</h1>
+
+</body>
+
+</html>
