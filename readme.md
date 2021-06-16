@@ -60,6 +60,11 @@
 ## 物业管理系统
 + https://gitee.com/wuxw7/MicroCommunity
 
+## 前端面试题(比较详细)
+
+前端面试题一 腾讯文档版: https://docs.qq.com/doc/DSEVFallIbG1kZXJv
+前端面试题二 腾讯文档版: https://docs.qq.com/doc/DSGJaY3dacmxsTXZ3
+
 ## 阿里、字节面试题
 
 内附答案:
