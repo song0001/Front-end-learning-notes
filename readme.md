@@ -60,9 +60,13 @@
 ## 物业管理系统
 + https://gitee.com/wuxw7/MicroCommunity
 
+## 阿里、字节面试题
 
+内附答案:
 
+https://docs.qq.com/doc/DSFBhQmpZbWtNUUZD
 
+https://docs.qq.com/doc/DSGltdEFtTUNDSXFT
 
 
 
