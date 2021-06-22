@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script  src="./lib/react/react.development.js"></script>
+    <script  src="./lib/react/react-dom.development.js"></script>
+    <!-- 引入babel库,用于解析jsx语法-->
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+   class HelloWorld extends React.Component {
+      render(){
+        return (
+          <div className={'danger large'}>
+            <h2>倒计时</h2>
+            { /* className和class属性是一样的,而且必须是驼峰 */ }
+            <span>{ new Date().toString() }</span>
+          </div>
+        )
+      }
+    }
+    setInterval(()=>{
+      // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+      ReactDOM.render(<HelloWorld />,document.getElementById('root'));
+    },1000)
+    </script>
+</body>
+
+</html>
