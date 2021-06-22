@@ -15,15 +15,78 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-    // 添加事件
-   class HelloWorld extends React.Component {
-  say(){
-    console.log('say...');
+    // 添加事件 event对象
+//    class HelloWorld extends React.Component {
+//   say(e){
+//     console.log('say...');
+//     console.log(e.target); //目标组件
+
+//   }
+//   render(){
+//     return (
+//       <div>
+//         <h2 onClick={this.say}>hello,world!</h2>
+//       </div>
+//     )
+//   }
+// }
+// // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+// ReactDOM.render(<HelloWorld />,document.getElementById('root'));
+
+
+// 向事件传参
+// class HelloWorld extends React.Component {
+//   say(e){
+//     console.log('say...');
+//     console.log(e.target);
+//   }
+//   jumpTo(e){
+//     // 可以通过e阻止默认事件
+//     e.preventDefault();
+//     console.log(e.target);
+//   }
+//   deleteById(id,e){
+//     console.log(e);
+//     console.log('删除: '+id);
+//   }
+//   render(){
+//     return (
+//       <div>
+//         <h2 onClick={this.say}>hello,world!</h2>
+//         <a href="https://bufanui.com" onClick={this.jumpTo}>bf官网</a>
+//         <p onClick={e=> this.deleteById(1,e)}>id:1的数据</p>  
+//       </div>
+//     )
+//   }
+// }
+// // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+// ReactDOM.render(<HelloWorld />,document.getElementById('root'));
+
+
+// 关于this
+class HelloWorld extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = ({
+      toggle: true
+    })
+    // this.toggleBtn = this.toggleBtn.bind(this);
+  }
+
+  // toggleBtn(){
+    
+// 利用箭头函数继承父类的this
+    toggleBtn=()=>{
+    console.log('this',this);
+    // 注意: 这里必须返回一个state对象
+    this.setState((state)=>({
+      toggle: !state.toggle
+    }))
   }
   render(){
     return (
       <div>
-        <h2 onClick={this.say}>hello,world!</h2>
+        <button onClick={this.toggleBtn}>开关/{this.state.toggle?'关闭':'开启'}</button>
       </div>
     )
   }

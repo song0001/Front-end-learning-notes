@@ -2,49 +2,51 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script  src="./lib/react/react.development.js"></script>
-    <script  src="./lib/react/react-dom.development.js"></script>
-    <!-- 引入babel库,用于解析jsx语法-->
-    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./lib/react/react.development.js"></script>
+  <script src="./lib/react/react-dom.development.js"></script>
+  <!-- 引入babel库,用于解析jsx语法-->
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 
 <body>
-    <div id="root"></div>
-    <script type="text/babel">
-    class HelloWorld extends React.Component {     
+  <div id="root"></div>
+  <script type="text/babel">
+    class HelloWorld extends React.Component {
       constructor(props) {
         super(props);
         // 创建ref
         this.inputRef = React.createRef();
         this.handleSubmit = this.handleSubmit.bind(this);
+
       }
-      handleSubmit(e){
+
+      handleSubmit(e) {
         // 阻止默认提交行为
         e.preventDefault();
         // 打印ref观察结果
         console.log(this.inputRef)
         console.log(this.inputRef.current.value)
       }
-      render(){
+      render() {
         return (
           <div>
             <form action="/abc" onSubmit={this.handleSubmit}>
-              <input type="text" ref={this.inputRef}/>  
+              <input type="text" ref={this.inputRef} />
               <input type="submit" value="提交" />
             </form>
-    
+
           </div>
         )
       }
     }
     // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
-    ReactDOM.render(<HelloWorld />,document.getElementById('root'));
-  
-    </script>
+    ReactDOM.render(<HelloWorld />, document.getElementById('root'));
+
+  </script>
 </body>
 
 </html>
