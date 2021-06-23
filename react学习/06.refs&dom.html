@@ -15,37 +15,85 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    class HelloWorld extends React.Component {
-      constructor(props) {
-        super(props);
-        // 创建ref
-        this.inputRef = React.createRef();
-        this.handleSubmit = this.handleSubmit.bind(this);
+    // class HelloWorld extends React.Component {
+    //   constructor(props) {
+    //     super(props);
+    //     // 创建ref
+    //     this.inputRef = React.createRef();
+    //     this.handleSubmit = this.handleSubmit.bind(this);
 
-      }
+    //   }
 
-      handleSubmit(e) {
-        // 阻止默认提交行为
-        e.preventDefault();
-        // 打印ref观察结果
-        console.log(this.inputRef)
-        console.log(this.inputRef.current.value)
-      }
-      render() {
-        return (
-          <div>
-            <form action="/abc" onSubmit={this.handleSubmit}>
-              <input type="text" ref={this.inputRef} />
-              <input type="submit" value="提交" />
-            </form>
+    //   handleSubmit(e) {
+    //     // 阻止默认提交行为
+    //     e.preventDefault();
+    //     // 打印ref观察结果
+    //     console.log(this.inputRef)
+    //     console.log(this.inputRef.current.value)
+    //   }
+    //   render() {
+    //     return (
+    //       <div>
+    //         <form action="/abc" onSubmit={this.handleSubmit}>
+    //           <input type="text" ref={this.inputRef} />
+    //           <input type="submit" value="提交" />
+    //         </form>
 
-          </div>
-        )
-      }
-    }
-    // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
-    ReactDOM.render(<HelloWorld />, document.getElementById('root'));
+    //       </div>
+    //     )
+    //   }
+    // }
 
+    // // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+    // ReactDOM.render(<HelloWorld />, document.getElementById('root'));
+
+
+    
+    // 在class上声明ref
+    class Demo extends React.Component {
+  say(){
+    console.log('this is demo...');
+  }
+  render(){
+    return (
+      <div>
+        这是demo  
+      </div>
+    )
+  }
+}
+class HelloWorld extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.inputRef = React.createRef();
+    this.demoRef = React.createRef();
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  componentDidMount(){
+    console.log(this.demoRef.current);
+  }
+  handleSubmit(e){
+    // 阻止默认提交行为
+    e.preventDefault();
+    console.log(this.inputRef)
+  }
+  render(){
+    return (
+      <div>
+        <Demo ref={this.demoRef}/>
+        <form action="/abc" onSubmit={this.handleSubmit}>
+          <input type="text" ref={this.inputRef}/>  
+          <input type="submit" value="提交" />
+        </form>
+
+      </div>
+    )
+  }
+}
+
+// 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+ReactDOM.render(<HelloWorld />,document.getElementById('root'));
   </script>
 </body>
 
