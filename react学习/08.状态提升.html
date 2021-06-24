@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./lib/react/react.development.js"></script>
+  <script src="./lib/react/react-dom.development.js"></script>
+  <!-- 引入babel库,用于解析jsx语法-->
+  <script src="./lib/react/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    class Salary extends React.Component {
+      constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+      }
+      handleChange(e) {
+        this.props.onChange(e.target.value);
+      }
+      render() {
+        return (
+          <div>
+            <fieldset>
+              <legend>薪资{this.props.cType}:</legend>
+              <input onChange={this.handleChange} value={this.props.cValue || ''} />
+              {this.props.cTypeIcon}
+            </fieldset>
+          </div>
+        );
+      }
+    }
+
+    class HelloWorld extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          type: 'CNY',
+          salary: 0
+        },
+          this.reverse = this.reverse.bind(this);
+        this.handleCNYChange = this.handleCNYChange.bind(this);
+        this.handleUSDChange = this.handleUSDChange.bind(this);
+      }
+      componentDidUpdate() {
+        console.log(this.state);
+      }
+      reverse(type, salary) {
+        // 费率
+        const C = 6.65;
+        var outValue = 0;
+        var inputValue = parseFloat(salary);
+        if (Number.isNaN(inputValue)) {
+          return '';
+        }
+        // 转换成人民币
+        if (type == 'CNY') {
+          outValue = salary * C;
+        } else {
+          outValue = salary / C;
+        }
+        // 四舍五入 保留2位
+        var roundValue = Math.round(outValue * 100) / 100;
+        // 格式化
+        if (roundValue.toString().indexOf('.') == -1) {
+          roundValue += '.00';
+        } else {
+          //小数部分
+          var dotNumber = roundValue.toString().split('.')[1];
+          dotNumber = dotNumber.length == 1 ? dotNumber + '0' : dotNumber;
+          roundValue = roundValue.toString().split('.')[0] + '.' + dotNumber;
+        }
+        return roundValue;
+      }
+      // 人民币转换美元
+      handleCNYChange(salary) {
+        this.setState({
+          type: 'CNY',
+          value: salary
+        })
+      }
+      handleUSDChange(salary) {
+        this.setState({
+          type: 'USD',
+          value: salary
+        })
+      }
+      // 判断是否是高收入
+      areUOk() {
+        // 人民币高于1000算高收入
+        if (this.state.type == 'CNY') {
+          return this.state.value > 1000;
+        } else {
+          return this.reverse('CNY', this.state.value) > 1000;
+        }
+      }
+      render() {
+        var type = this.state.type;
+        var value = this.state.value;
+        var CNY_value = type == 'CNY' ? value : this.reverse('CNY', value);
+        var USD_value = type == 'USD' ? value : this.reverse('USD', value);
+        return (
+          <div>
+            <Salary key="1" onChange={this.handleCNYChange} cValue={CNY_value} cType="人民币" cTypeIcon="￥" />
+            <Salary key="2" onChange={this.handleUSDChange} cValue={USD_value} cType="美元" cTypeIcon="＄" />
+            <p>{this.areUOk() ? '您真是有钱人!' : '你还需要加油啊!'}</p>
+          </div>
+
+        )
+      }
+    }
+    // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+    ReactDOM.render(<HelloWorld />, document.getElementById('root'));
+  </script>
+</body>
+
+</html>
