@@ -19,7 +19,7 @@
 ### 3.创建分支
 
 ```
-git branch +分支名
+创建分支       git branch +分支名
 创建并切换分支  git checkout -b +分支名  (-b是branch的简写)
 ```
 
