@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+<style>
+  .box {
+    width: 400px;
+    height: 400px;
+    background-color: #f00;
+    position: relative;
+  }
+
+  .A {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(68, 0, 255);
+    position: absolute;
+    z-index: 100;
+  }
+
+  .B {
+    width: 100px;
+    height: 100px;
+    /* background-color: rgb(255, 0, 234); */
+    position: absolute;
+    z-index: 200;
+  }
+
+  .A1 {
+    width: 50px;
+    height: 100px;
+    background-color: rgb(217, 0, 255);
+    position: absolute;
+    z-index: 300;
+  }
+
+  .B1 {
+    width: 50px;
+    height: 50px;
+    background-color: rgb(255, 0, 234);
+    position: absolute;
+    z-index: 1;
+  }
+</style>
+
+<body>
+  <div class="box">
+    <div class="A">
+      <div class="A1"></div>
+    </div>
+    <div class="B">
+      <div class="B1"></div>
+    </div>
+  </div>
+  <input type="button" onclick="alert(1);" id="a" name="b" />
+  <script>
+
+    console.log((1234.435345345).toFixed(2) + '%')
+    //     如何实现？输入：numbers=[5,3,5,8],result=10。输出：[0,2]？
+    // 解释：因为numbers[0]+numbers[2]==result。
+    // 限制：2<=numbers.length<=100，
+    // -100<=numbers[i]<=100,
+    // -200<=result<=200，
+    // 只会存在一个有效答案。
+    // 请实现这样一个函数functionSum(numbers,result){...}
+    function fn(arr, result) {
+      var index = new Map();
+      for (var i = 0; i < arr.length; i++) {
+        var val = arr[i];
+        var j = index.get(result - val);
+        if (j !== undefined)
+          return [j, i];
+        index.set(val, i);
+      }
+      return null;
+    }
+    //  sum(numbers, result) {
+    //       for (i = 0; i++; i < numbers.length) {
+    //         let target = result - numbers[i];
+    //         if (numbers.indexOf(target) !== -1) {
+    //           return [i, numbers.indexOf(target)];
+    //         }
+    //       }
+    //     }
+
+    console.log(fn([5, 3, 5, 8], 10))
+    var arr1 = [
+      {
+        name: '徐家汇',
+        type: '阳光心园学员数',
+        count: 214
+      },
+      {
+        name: '天平',
+        type: '阳光心园学员数',
+        count: 112
+      }
+    ]
+    var arr2 = [
+      {
+        name: '徐家汇',
+        type: '阳光之家学员数',
+        count: 231
+      },
+      {
+        name: '天平',
+        type: '阳光之家学员数',
+        count: 112
+      }
+    ]
+    let array = [{
+      name: '徐家汇',
+      type: '阳光心园学员数',
+      count: 214
+    },
+    {
+      name: '徐家汇',
+      type: '阳光之家学员数',
+      count: 231
+    },
+    {
+      name: '天平',
+      type: '阳光心园学员数',
+      count: 112
+    },
+    {
+      name: '天平',
+      type: '阳光之家学员数',
+      count: 112
+    }]
+    var arr = new Array(6)
+    arr[0] = "George"
+    arr[1] = "John"
+    arr[2] = "Thomas"
+    arr[3] = "James"
+    arr[4] = "Adrew"
+    arr[5] = "Martin"
+    var a = arr.slice()
+    console.log(a, arr)
+    console.log(a == arr)
+
+    var aaa = [1, 2]
+    var bbb = [1, 2]
+    var ccc = '1,2'
+    console.log(aaa, bbb, ccc)
+    console.log(aaa == bbb)
+    console.log(aaa == ccc)
+
+
+  </script>
+</body>
+
+</html>
