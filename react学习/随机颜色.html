@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 随机颜色
+        function rgb() {//rgb颜色随机
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            // console.log(r,b,g)
+            var rgb = 'rgb' + '(' + r + ',' + g + ',' + b + ')';
+            return rgb;
+        }
+
+        function Color(ele) {
+            //   let colors = ['rgb(22, 35, 151)', 'rgb(147, 22, 151)', 'rgb(22, 142, 151)', 'rgb(22, 151, 54)', 'rgb(151, 22, 22)']
+            this.run = function () {
+                setInterval(() => {
+                    //   let i = Math.floor(Math.random() * colors.length)
+                    //   ele.style.backgroundColor = colors[i]
+                    ele.style.backgroundColor = rgb()
+                }, 1000)
+
+            }
+        }
+        let obj = new Color(document.body)
+        obj.run()
+
+    </script>
+</body>
+
+</html>
