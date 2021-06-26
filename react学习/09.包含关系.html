@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./lib/react/react.development.js"></script>
+  <script src="./lib/react/react-dom.development.js"></script>
+  <!-- 引入babel库,用于解析jsx语法-->
+  <script src="./lib/react/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+  //  props.children
+  class SideBarItems extends React.Component {
+  render(){
+    return (
+      <ul>
+        <li>首页</li>
+        <li>用户管理</li>
+        <li>商品管理</li>
+        <li>内容管理</li>
+      </ul>
+    )
+  }
+}
+class SideBar extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return (
+      <div>
+        {this.props.children}  
+      </div>
+    )
+  }
+}
+class Content extends React.Component {
+  render(){
+    return (
+      <div>
+        这是内容部分  
+      </div>
+    )
+  }
+}
+class FootBar extends React.Component {
+  render(){
+    return (
+      <div>
+        这是底部部分  
+      </div>
+    )
+  }
+}
+class BaseLayout extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return (
+      <div>
+        {/*props.children是默认熟悉,指当前组件标签的内容部分*/}
+        {this.props.children}
+      </div>
+    )
+  }
+}
+class HelloWorld extends React.Component {
+  render(){
+    return (
+      <div>
+        {/*类似于vue的插槽slot */}
+        <BaseLayout>
+          <SideBar>
+            <SideBarItems/>
+          </SideBar>
+          <Content/>
+          <FootBar/>
+        </BaseLayout>
+      </div>
+    )
+  }
+}
+// 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
+ReactDOM.render(<HelloWorld />, document.getElementById("root"));
+  </script>
+</body>
+
+</html>
