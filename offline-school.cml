@@ -1,0 +1,529 @@
+<template>
+<view class="offline-school">
+  <cml type="wx">
+    <map id="map" markers="{{markers}}" include-points="{{points}}" bindmarkertap="markerTap" />
+  </cml>
+  <view class="school-list-area">
+    <view class="title">请选择上课校区</view>
+    <view class="content">
+      <view class="school-item {{checkedSchoolId === item.id ? 'active':''}}" c-for="{{schoolList}}" c-for-index="index" c-for-item="item" c-key="index" c-bind:tap="chooseSchool(item.id)">
+        <view class="t">
+          <view class="l">
+            <view class="tag">{{item.tag}}</view>
+            <view class="name">{{item.title}}</view>
+          </view>
+          <view class="r">{{item._distance}}</view>
+        </view>
+        <view class="b">
+          <view class="address">{{item.address}}</view>
+          <view class="tel">
+            <view>{{item.tel}}</view>
+            <view class="icon" c-bind:tap="makePhoneCall(item)"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="btn {{checkedSchoolId === 0 || checkedSchoolId === 1 ? 'active':''}}" c-bind:tap="goSignUp">立即报名</view>
+  </view>
+</view>
+</template>
+
+<script>
+import {} from '../../api/index'
+import apiInterfaces from '../../components/utils.interface'
+import cml from 'chameleon-api'
+
+class OfflineSchool {
+  static getPhoneThrottle = true;
+  data = {
+    location: {
+      latitude: 0, // 纬度
+      longitude: 0, // 经度
+    },
+    mapCtx: '',
+    markers: [{
+      id: 0,
+      latitude: 30.489935,
+      longitude: 114.404921,
+      iconPath: 'https://image.yitong.com/mp-youxue/icon/map_icon_address_nor.png',
+      width: 24,
+      height: 31,
+    }, {
+      id: 1,
+      latitude: 30.522400,
+      longitude: 114.335381,
+      iconPath: 'https://image.yitong.com/mp-youxue/icon/map_icon_address_nor.png',
+      width: 24,
+      height: 31,
+    }, { // 用户位置
+      id: 2,
+      latitude: 0,
+      longitude: 0,
+      iconPath: 'https://image.yitong.com/mp-youxue/icon/map_icon_me_nor.png',
+      width: 8,
+      height: 8,
+    }
+    // {
+    //   id: 3,
+    //   latitude: 30.501805,
+    //   longitude: 114.329503,
+    //   iconPath: 'https://image.yitong.com/mp-youxue/icon/map_icon_address_nor.png',
+    //   width: 24,
+    //   height: 31,
+    // },
+    ],
+    points: [{ // 右 下  // 地图边缘留0.01的空白余量
+      latitude: 30.479935, // 489935
+      longitude: 114.414921 // 404921
+    },{ // 上 左
+      latitude: 30.532400, // 522400
+      longitude: 114.325381 // 335381
+    },{
+      latitude: 30.532400,
+      longitude: 114.325381
+    }
+    // { // 左 
+    //   latitude: 30.501805, // 501805
+    //   longitude: 114.319503 // 329503
+    // },
+    ],
+    schoolList: [ // 校区列表
+      {
+        title: '保利时代校区',
+        tag: '光谷',
+        address: '东湖高新区新竹路18号保利天悦22-207',
+        location: '30.489935,114.404921',
+        lat: 30.489935,
+        lng: 114.404921,
+        tel: '18507173713',
+        _distance: '',
+        id: 0
+      },{
+        title: '百瑞景校区',
+        tag: '武昌',
+        address: '武昌区百瑞景中央生活区商业街（宝通寺路36号）',
+        location: '30.522400,114.335381',
+        lat: 30.522400,
+        lng: 114.335381,
+        tel: '18627927225',
+        _distance: '',
+        id: 1
+      }
+      //  {
+      //   title: '花样街校区',
+      //   tag: '洪山',
+      //   address: '洪山区文治街武昌府花样街4#商业街1-2层',
+      //   location: '30.501805,114.329503',
+      //   lat: 30.501805,
+      //   lng: 114.329503,
+      //   tel: '18327171767',
+      //   _distance: '',
+      //   id: 1
+      // }, 
+      
+    ],
+    checkedSchoolId: '' // 选中校区id
+  }
+
+  computed = {}
+
+  watch = {}
+
+  methods = {
+    /**
+     * 获取地理位置
+     */
+    getLocation() {
+      console.log('获取地理位置');
+      apiInterfaces.showLoading({
+        title: '加载中...'
+      })
+      const _this = this;
+      apiInterfaces.getLocation({
+        type: 'gcj02',
+        success(res) {
+          // console.log(res,'获取地理位置');
+          _this.location.latitude = res.latitude
+          _this.location.longitude = res.longitude
+          _this.markers[2].latitude = res.latitude
+          _this.markers[2].longitude = res.longitude
+          // 地图边缘留0.01的空白余量
+          let lat = null
+          let lng = null
+          if (res.latitude + 0.01 > 30.522400) { // 上
+            lat = res.latitude + 0.01
+          } else if (res.latitude - 0.01 < 30.489935) { // 下
+            lat = res.latitude - 0.01
+          } else {
+            lat = res.latitude
+          }
+          if (res.longitude + 0.01 > 114.404921) { // 右
+            lng = res.longitude + 0.01
+          } else if (res.longitude - 0.01 < 114.335381) { // 左114.325381
+            lng = res.longitude - 0.01
+          } else {
+            lng = res.longitude
+          }
+          _this.points[2].latitude = lat
+          _this.points[2].longitude = lng
+          console.log(_this.points[2]);
+          // _this.moveToUserLocation()
+          _this.getSchoolDistance()
+        },
+        complete() {
+          apiInterfaces.hideLoading()
+        }
+      })
+    },
+
+
+    /**
+     * 计算校区距离
+     */
+    getSchoolDistance() {
+      const _this = this;
+      this.schoolList.forEach(el => {
+        console.log(el.location, 99999);
+        el._distance = this.getDistance(_this.location.latitude, _this.location.longitude, el.lat, el.lng)
+      })
+      _this.schoolList = _this.schoolList.sort((a, b) => a._distance - b._distance)
+      _this.schoolList.forEach(el => {
+        el._distance = el._distance < 1000 ? el._distance + 'm' : Math.floor(el._distance / 10) / 100 + 'km'
+      })
+    },
+
+    //计算距离，参数分别为第一点的纬度，经度；第二点的纬度，经度
+    getDistance(lat1, lng1, lat2, lng2) {
+      var radLat1 = this.Rad(lat1);
+      var radLat2 = this.Rad(lat2);
+      var a = radLat1 - radLat2;
+      var b = this.Rad(lng1) - this.Rad(lng2);
+      var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+        Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+      s = s * 6378.137; // EARTH_RADIUS;
+      s = Math.round(s * 10000) / 10; //输出为m
+      //s=s.toFixed(4);
+      return s;
+    },
+
+    Rad(d) { //经纬度转换成三角函数中度分表形式。
+      return d * Math.PI / 180.0;
+    },
+
+    /**
+     * 点击标记点
+     */
+    markerTap(e) {
+      console.log('点击标记点', e);
+      for (let i = 0; i < this.markers.length - 1; i++) {
+        this.markers[i].iconPath = `https://image.yitong.com/mp-youxue/icon/map_icon_address_${i === e.detail.markerId ? 'sel' : 'nor'}.png`
+      }
+      this.checkedSchoolId = e.detail.markerId
+      console.log('checkedSchoolId', this.checkedSchoolId);
+    },
+
+    /**
+     * 选中校区标签
+     */
+    chooseSchool(id) {
+      for (let i = 0; i < this.markers.length - 1; i++) {
+        this.markers[i].iconPath = `https://image.yitong.com/mp-youxue/icon/map_icon_address_${i === id ? 'sel' : 'nor'}.png`
+      }
+      this.checkedSchoolId = id
+    },
+
+    /**
+     * 拨打校区电话
+     */
+    makePhoneCall(item) {
+      console.log('打电话');
+      // if (item.id === this.checkedSchoolId) {
+        apiInterfaces.makePhoneCall({
+          phoneNumber: item.tel
+        }).catch((e) => { //捕获错误
+          console.log(e)
+        })
+      // }
+    },
+
+    /**
+     * 立即报名
+     */
+    goSignUp() { 
+      if(this.checkedSchoolId === 0 || this.checkedSchoolId === 1){
+        apiInterfaces.showLoading({
+          title: '跳转中...'
+        })
+        let ids = ''
+        switch (this.checkedSchoolId) {
+          case 0:
+            ids = '44'
+            break;
+          case 1:
+            ids = '46'
+            break;
+          // case 1:
+          //   ids = '45'
+          //   break;
+          default:
+            break;
+        }
+        apiInterfaces.navigateToMiniProgram({
+          appId: 'wxa8fea95347930b0d',
+          path: `pages/@activity-pay/group-purchase/main?id=10458${ids}`,
+          complete(res) {
+            // 打开成功
+            console.log(res,'-----------------成功打开第三方应用');
+            apiInterfaces.hideLoading()
+          }
+        })
+        console.log('立即报名checkedSchoolId-------------', this.checkedSchoolId);
+      } else {
+        apiInterfaces.showToast({
+          title: '请选择上课校区',
+          icon: 'none',
+          duration: 3000
+        })
+      }
+    },
+
+    /**
+     * 位置授权验证
+     */
+    vertifyLocation() {
+      console.log('验证');
+      const _this = this
+      apiInterfaces.getSetting({
+        success: (res) => {
+          console.log(res);
+          console.log(res.authSetting['scope.userLocation']);
+          if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) { //非初始化进入该页面,且未授权
+            apiInterfaces.showModal({
+              title: '是否授权当前位置',
+              content: '需要获取您的地理位置，请确认授权，否则地图功能将无法使用',
+              success: function(res) {
+                if (res.cancel) {
+                  console.info("1授权失败返回数据");
+                } else if (res.confirm) {
+                  apiInterfaces.openSetting({
+                    success: function(data) {
+                      console.log(data);
+                      if (data.authSetting["scope.userLocation"] == true) {
+                        cml.showToast({
+                          title: '授权成功',
+                          icon: 'success',
+                          duration: 5000
+                        })
+                        //再次授权，调用getLocationt的API
+                        _this.getLocation()
+                      } else {
+                        cml.showToast({
+                          title: '授权失败',
+                          icon: 'success',
+                          duration: 5000
+                        })
+                      }
+                    }
+                  })
+                }
+              }
+            })
+          } else if (res.authSetting['scope.userLocation'] == undefined) { //初始化进入
+            _this.getLocation()
+          } else { // 授权
+            _this.getLocation()
+          }
+        }
+      })
+    }
+
+  }
+
+  beforeCreate(query) {}
+
+  created(query) {
+    this.mapCtx = apiInterfaces.createMapContext('map')
+    //logo 放到右上角
+    // this.mapCtx.getUiSettings().setLogoPosition(TencentMapOptions.LOGO_POSITION_TOP_RIGHT);   
+
+    this.vertifyLocation()
+  }
+
+  beforeMount(query) {}
+
+
+  onLoad() {}
+
+  onShow() {}
+
+  mounted() {}
+
+  onHide() {}
+
+  beforeDestroy() {}
+
+  destroyed() {}
+}
+export default new OfflineSchool();
+</script>
+
+<style lang="less" scoped>
+.offline-school {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  #map {
+    width: 100%;
+    height: 444cpx;
+  }
+
+  .school-list-area {
+    width: 100%;
+    height: calc(100% - 404cpx);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: #FFFFFF;
+    border-radius: 40cpx 40cpx 0 0;
+    box-sizing: border-box;
+    padding: 30cpx 0;
+
+    .title {
+      font-size: 32cpx;
+      color: #303133;
+      line-height: 48cpx;
+      text-align: center;
+    }
+
+    .content {
+      width: 100%;
+      height: calc(100% - 60cpx - 88cpx - 48cpx);
+      overflow-y: scroll;
+      margin-top: 10cpx;
+
+      .school-item {
+        box-sizing: border-box;
+        width: 690cpx;
+        // min-height: 220cpx;
+        background: #FFFFFF;
+        border: 1px solid transparent;
+        box-shadow: 0px 2px 16px 0px rgba(48, 49, 51, 0.1);
+        border-radius: 24cpx;
+        padding: 40cpx 30cpx 30cpx;
+        margin: 30cpx auto;
+
+        &.active {
+          background: #FFF2F3;
+          border: 1px solid #FF5257;
+        }
+
+        .t {
+          display: flex;
+          height: 54cpx;
+          align-items: center;
+          justify-content: space-between;
+
+          .l {
+            display: flex;
+            align-items: center;
+
+            .tag {
+              max-width: 150cpx;
+              height: 40cpx;
+              background: #FFA200;
+              border-radius: 8cpx;
+              font-size: 26cpx;
+              font-weight: bold;
+              color: #FFFFFF;
+              line-height: 40cpx;
+              text-align: center;
+              padding: 0 10cpx;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
+            .name {
+              width: 400cpx;
+              font-size: 36cpx;
+              font-weight: bold;
+              color: #303133;
+              line-height: 54cpx;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              padding-left: 11cpx;
+            }
+          }
+
+          .r {
+            font-size: 28cpx;
+            font-weight: 500;
+            color: #303133;
+            line-height: 44cpx;
+          }
+        }
+
+        .b {
+          .address {
+            width: 100%;
+            font-size: 28cpx;
+            color: #303133;
+            line-height: 44cpx;
+            margin: 4cpx 0 0;
+          }
+
+          .tel {
+            width: 100%;
+            height: 48cpx;
+            display: flex;
+            justify-content: space-between;
+            line-height: 48cpx;
+            margin-top: 10cpx;
+
+            .icon {
+              width: 48cpx;
+              height: 48cpx;
+              background: url('https://image.yitong.com/mp-youxue/icon/map_icon_call_blue.png') no-repeat center center/100% 100%;
+            }
+          }
+        }
+      }
+    }
+
+    .btn {
+      width: 690cpx;
+      height: 88cpx;
+      margin: 0 auto;
+      position: absolute;
+      bottom: 30cpx;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FFEBEB;
+      border-radius: 44cpx;
+      font-size: 32cpx;
+      color: #FFFFFF;
+      line-height: 88cpx;
+      text-align: center;
+
+      &.active {
+        background: #FF5257 !important;
+      }
+    }
+  }
+}
+</style>
+
+<script cml-type="json">
+{
+		"base": {
+				"usingComponents": {
+						
+				}
+		},
+		"wx": {
+				"navigationBarTitleText": "立即报名"
+		}
+}
+</script>
