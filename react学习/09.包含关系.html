@@ -87,8 +87,35 @@ class HelloWorld extends React.Component {
     )
   }
 }
+
+
+// 具名插槽
+function SplitPane(props) {
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">
+        {props.left}
+      </div>
+      <div className="SplitPane-right">
+        {props.right}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <SplitPane
+      left={
+        <Content/>
+      }
+      right={
+        <FootBar/>
+      } />
+  );
+}
 // 通过调用React自身方法render可以得到当前组件的实例对象,并渲染到页面容器.
-ReactDOM.render(<HelloWorld />, document.getElementById("root"));
+ReactDOM.render([<HelloWorld />,<App/>], document.getElementById("root"));
   </script>
 </body>
 
